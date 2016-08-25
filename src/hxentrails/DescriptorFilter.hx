@@ -8,19 +8,17 @@ abstract DescriptorFilter(Int) from Int to Int {
     }
 
     @:op(A += B)
-    inline public function add(flags:Array<DescriptorFlag>):DescriptorFilter {
+    inline public function add(flags:Array<DescriptorFlag>) {
         for (flag in flags) {
             this |= flag;
         }
-        return this;
     }
 
     @:op(A -= B)
-    inline public function remove(flags:Array<DescriptorFlag>):DescriptorFilter {
+    inline public function remove(flags:Array<DescriptorFlag>) {
         for (flag in flags) {
             this &= flag;
         }
-        return this;
     }
 
     @:op(A == B)
