@@ -1,9 +1,12 @@
 package hxentrails.descriptors;
 
-import hxentrails.data.BaseDescription;
+#if macro
 
-interface IDescriptor<T:BaseDescription> {
-    var result(default, null):T;
+import haxe.macro.Expr;
+
+interface IDescriptor {
+    var result(get, null):Expr;
     function analyze():Void;
-    function store():Void;
 }
+
+#end

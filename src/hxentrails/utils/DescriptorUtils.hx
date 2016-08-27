@@ -27,6 +27,37 @@ class DescriptorUtils {
         }
     }
 
+    public static function createFilter(flagsExpr:Array<Expr>):DescriptorFilter {
+        var filter = new DescriptorFilter();
+        var flags = [];
+        for (flag in flagsExpr) {
+            switch (flag.expr) {
+                case EField(e = {expr: EConst(CIdent("DescriptorFlag")), pos: _}, field = "ALL" | "CONSTRUCTOR" | "VARIABLES" | "PROPERTIES" | "IMPLEMENTATIONS" | "FUNCTIONS" | "RUNTIME_META" | "COMPILE_META"):
+                    switch (field) {
+                        case "ALL":
+                            flags.push(DescriptorFlag.ALL);
+                        case "CONSTRUCTOR":
+                            flags.push(DescriptorFlag.CONSTRUCTOR);
+                        case "VARIABLES":
+                            flags.push(DescriptorFlag.VARIABLES);
+                        case "PROPERTIES":
+                            flags.push(DescriptorFlag.PROPERTIES);
+                        case "IMPLEMENTATIONS":
+                            flags.push(DescriptorFlag.IMPLEMENTATIONS);
+                        case "FUNCTIONS":
+                            flags.push(DescriptorFlag.FUNCTIONS);
+                        case "RUNTIME_META":
+                            flags.push(DescriptorFlag.RUNTIME_META);
+                        case "COMPILE_META":
+                            flags.push(DescriptorFlag.COMPILE_META);
+                        case _:
+                    }
+                case _: Context.error("Wrong descriptor flag value.", flag.pos);
+            }
+        }
+        return filter += flags;
+    }
+
 //    public static function getTypeQalifiedName(classType:ClassType):String {
 //        try {
 //            return classType.module + "." + classType.name;
