@@ -3,7 +3,7 @@
 
 -main TestAll
 
--dce full
+-dce no
 
 -lib utest
 

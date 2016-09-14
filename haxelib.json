@@ -1,0 +1,12 @@
+{
+  "name": "hxentrails",
+  "url" : "https://github.com/bynuff/hxentrails",
+  "license": "MIT",
+  "tags": ["type description", "type info", "runtime type info", "rtti", "cross", "utility", "magic"],
+  "description": "Runtime type description.",
+  "version": "0.0.1",
+  "classPath": "src",
+  "releasenote": "Initial release.",
+  "contributors": ["bynuff"],
+  "dependencies": {}
+}
