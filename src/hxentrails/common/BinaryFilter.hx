@@ -1,14 +1,14 @@
-package hxentrails;
+package hxentrails.common;
 
 @:forward
-abstract DescriptorFilter(Int) from Int to Int {
+abstract BinaryFilter(Int) from Int to Int {
 
     inline public function new(?value:Null<Int>) {
         this = value != null ? value : 0;
     }
 
     @:op(A += B)
-    inline public function add(flags:Array<Int>):DescriptorFilter {
+    inline public function add(flags:Array<Int>):BinaryFilter {
         for (flag in flags) {
             this |= flag;
         }
@@ -16,7 +16,7 @@ abstract DescriptorFilter(Int) from Int to Int {
     }
 
     @:op(A -= B)
-    inline public function remove(flags:Array<Int>):DescriptorFilter {
+    inline public function remove(flags:Array<Int>):BinaryFilter {
         for (flag in flags) {
             this &= flag;
         }
@@ -24,7 +24,7 @@ abstract DescriptorFilter(Int) from Int to Int {
     }
 
     @:op(A == B)
-    inline public function contains(mode:Int):Bool {
+    inline public function hasFlag(mode:Int):Bool {
         return (this & mode) == mode;
     }
 

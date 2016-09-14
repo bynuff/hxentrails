@@ -1,4 +1,4 @@
-package hxentrails;
+package hxentrails.descriptors;
 
 enum DescriptorType {
     ENUM;

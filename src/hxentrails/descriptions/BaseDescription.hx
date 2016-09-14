@@ -1,9 +1,6 @@
-package hxentrails.data;
+package hxentrails.descriptions;
 
 class BaseDescription {
-
-    public var id(default, null):String;
-    public var filter(default, null):DescriptorFilter;
 
     public var typeName(default, null):String;
 

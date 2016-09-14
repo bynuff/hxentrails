@@ -4,16 +4,18 @@ package hxentrails.builders;
 
 import haxe.macro.Expr;
 
+import hxentrails.common.BinaryFilter;
 import hxentrails.descriptors.IDescriptor;
+import hxentrails.descriptors.DescriptorType;
 
-typedef DescriptorFactoryDelegate = Expr -> DescriptorType -> DescriptorFilter -> Bool -> IDescriptor;
+typedef DescriptorFactoryDelegate = Expr -> DescriptorType -> BinaryFilter -> Bool -> IDescriptor;
 
 @:final
 class DescriptorBuilder {
 
     var _typeExpr:Expr;
-    var _store:Bool;
-    var _filter:DescriptorFilter;
+    var _useCache:Bool;
+    var _filter:BinaryFilter;
     var _descriptorType:DescriptorType;
     var _factoryDelegate:DescriptorFactoryDelegate;
 
@@ -25,7 +27,6 @@ class DescriptorBuilder {
         _typeExpr = typeExpr;
         _descriptorType = descriptorType;
         _factoryDelegate = defaultFactoryDelegate;
-        _filter = new DescriptorFilter(DescriptorFlag.ALL);
     }
 
     public function withFactory(factoryDelegate:DescriptorFactoryDelegate):DescriptorBuilder {
@@ -33,20 +34,18 @@ class DescriptorBuilder {
         return this;
     }
 
-    public function withFilter(filter:DescriptorFilter):DescriptorBuilder {
-        if (filter != 0) {
-            _filter = filter;
-        }
+    public function withFilter(filter:BinaryFilter):DescriptorBuilder {
+        _filter = filter;
         return this;
     }
 
-    public function storeResult(store:Bool):DescriptorBuilder {
-        _store = store;
+    public function withCache(useCache:Bool):DescriptorBuilder {
+        _useCache = useCache;
         return this;
     }
 
     public function build():IDescriptor {
-        return _factoryDelegate(_typeExpr, _descriptorType, _filter, _store);
+        return _factoryDelegate(_typeExpr, _descriptorType, _filter, _useCache);
     }
 
 }

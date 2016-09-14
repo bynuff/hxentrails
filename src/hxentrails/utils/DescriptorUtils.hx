@@ -2,6 +2,8 @@ package hxentrails.utils;
 
 #if macro
 
+import Type in StdType;
+
 import haxe.macro.Expr;
 import haxe.macro.Type;
 import haxe.macro.Context;
@@ -11,15 +13,15 @@ using haxe.macro.ExprTools;
 @:final
 class DescriptorUtils {
 
-    public static function getTypeName(typeExpr:Expr):String {
+    inline public static function getTypeName(typeExpr:Expr):String {
         return typeExpr.toString();
     }
 
-    public static function getType(typeExpr:Expr):Type {
+    inline public static function getType(typeExpr:Expr):Type {
         return getTypeByName(getTypeName(typeExpr), typeExpr.pos);
     }
 
-    public static function getTypeByName(typeName:String, pos:Position):Type {
+    inline public static function getTypeByName(typeName:String, pos:Position):Type {
         return try {
             Context.getType(typeName);
         } catch (e:Dynamic) {
@@ -27,35 +29,19 @@ class DescriptorUtils {
         }
     }
 
-    public static function createFilter(flagsExpr:Array<Expr>):DescriptorFilter {
-        var filter = new DescriptorFilter();
-        var flags = [];
-        for (flag in flagsExpr) {
-            switch (flag.expr) {
-                case EField(e = {expr: EConst(CIdent("DescriptorFlag")), pos: _}, field = "ALL" | "CONSTRUCTOR" | "VARIABLES" | "PROPERTIES" | "IMPLEMENTATIONS" | "FUNCTIONS" | "RUNTIME_META" | "COMPILE_META"):
-                    switch (field) {
-                        case "ALL":
-                            flags.push(DescriptorFlag.ALL);
-                        case "CONSTRUCTOR":
-                            flags.push(DescriptorFlag.CONSTRUCTOR);
-                        case "VARIABLES":
-                            flags.push(DescriptorFlag.VARIABLES);
-                        case "PROPERTIES":
-                            flags.push(DescriptorFlag.PROPERTIES);
-                        case "IMPLEMENTATIONS":
-                            flags.push(DescriptorFlag.IMPLEMENTATIONS);
-                        case "FUNCTIONS":
-                            flags.push(DescriptorFlag.FUNCTIONS);
-                        case "RUNTIME_META":
-                            flags.push(DescriptorFlag.RUNTIME_META);
-                        case "COMPILE_META":
-                            flags.push(DescriptorFlag.COMPILE_META);
-                        case _:
-                    }
-                case _: Context.error("Wrong descriptor flag value.", flag.pos);
-            }
-        }
-        return filter += flags;
+    inline public static function getTypePath(type:Class<Dynamic>):TypePath {
+        var typeName = StdType.getClassName(type);
+        var macroType = getTypeByName(typeName, Context.currentPos());
+
+        return switch (macroType) {
+            case TInst(t, _) if (t.get() != null):
+                {
+                    pack: t.get().pack,
+                    name: t.get().name
+                }
+            case _:
+                Context.error('Can not execute type path from $typeName', Context.currentPos());
+        };
     }
 
 //    public static function getTypeQalifiedName(classType:ClassType):String {

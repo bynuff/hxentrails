@@ -5,8 +5,11 @@ package hxentrails.descriptors;
 import haxe.macro.Expr;
 
 interface IDescriptor {
-    var result(get, null):Expr;
+
+    var result(get, never):Expr;
+
     function analyze():Void;
+
 }
 
 #end
