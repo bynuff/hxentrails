@@ -5,5 +5,4 @@ enum DescriptorType {
     CLASS;
     TYPEDEF;
     ABSTRACT;
-    INTERFACE;
 }

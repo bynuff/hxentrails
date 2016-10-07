@@ -29,7 +29,6 @@ class BuilderFactory {
             case DescriptorType.TYPEDEF:
                new TypedefDescriptor(typeExpr, filter, useCache);
 //            case DescriptorType.ABSTRACT:
-//            case DescriptorType.INTERFACE:
             case _:
                 Context.error("Not supported descriptor type.", Context.currentPos());
         }

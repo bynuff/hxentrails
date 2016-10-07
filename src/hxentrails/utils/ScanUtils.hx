@@ -1,22 +1,26 @@
 package hxentrails.utils;
 
 import haxe.macro.Expr;
+import haxe.macro.Context;
 
 import hxentrails.common.BinaryFilter;
 import hxentrails.builders.BuilderFactory;
 import hxentrails.descriptors.DescriptorFlag;
 import hxentrails.descriptors.DescriptorType;
 
+using hxentrails.utils.DescriptorUtils;
+
 @:final
 class ScanUtils {
 
     macro public static function describe(type:Expr, useCache:Bool, flags:Array<Expr>):Expr {
-        // TODO: check descriptor type by expr
-//        return describeType(type, useCache, makeDescriptorBinaryFilterFromExprs(flags), getDescriptorType(type));
-        return macro null;
+        return describeType(type, useCache, makeDescriptorBinaryFilterFromExprs(flags), getDescriptorType(type));
     }
 
     macro public static function describeTypedef(type:Expr, useCache:Bool, flags:Array<Expr>):Expr {
+        if (getDescriptorType(type) != DescriptorType.TYPEDEF) {
+            Context.error("Wrong type definition. It should be typedef only.", type.pos);
+        }
         return describeType(type, useCache, makeDescriptorBinaryFilterFromExprs(flags), DescriptorType.TYPEDEF);
     }
 
@@ -49,6 +53,25 @@ class ScanUtils {
         var filter = new BinaryFilter();
         filter += flags != null ? parser(flags) : defaults;
         return filter;
+    }
+
+    inline static function getDescriptorType(typeExpr:Expr):DescriptorType {
+        return switch (typeExpr.getType()) {
+            case TEnum(t, params):
+                DescriptorType.ENUM;
+            case TInst(t, params):
+                DescriptorType.CLASS;
+            case TType(t, params):
+                DescriptorType.TYPEDEF;
+//            case TFun(args, ret):
+//            case TAnonymous(a):
+//            case TDynamic(t):
+//            case TLazy(f):
+            case TAbstract(t, params):
+                DescriptorType.ABSTRACT;
+            case _:
+                Context.error('Type ${typeExpr.getType()} not supported.', typeExpr.pos);
+        }
     }
 #end
 
