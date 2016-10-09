@@ -2,18 +2,22 @@ package hxentrails.descriptors;
 
 #if macro
 
+import sys.FileSystem;
+import haxe.macro.Type;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 
 import hxentrails.common.BinaryFilter;
+import hxentrails.descriptions.Metadata;
 import hxentrails.descriptions.BaseDescription;
 
 using hxentrails.utils.DescriptorUtils;
 
-class BaseDescriptor implements IDescriptor {
+class BaseDescriptor<T:BaseType> implements IDescriptor {
 
     public var result(get, never):Expr;
 
+    var _type:T;
     var _typeExpr:Expr;
     var _useCache:Bool;
     var _filter:BinaryFilter;
@@ -22,11 +26,13 @@ class BaseDescriptor implements IDescriptor {
     var _descriptionBaseType:Class<BaseDescription>;
 
     public function new(
+        type:T,
         typeExpr:Expr,
         filter:BinaryFilter,
         descriptionBaseType:Class<BaseDescription>,
         useCache:Bool
     ) {
+        _type = type;
         _typeExpr = typeExpr;
         _filter = filter;
         _useCache = useCache;
@@ -78,28 +84,69 @@ class BaseDescriptor implements IDescriptor {
     }
 
     function parseType() {
-
-//        public var type(default, null):Class<Dynamic>;
-
-//        public var params(default, null):Array<TypeInfo>;
-//        public var isPrivate(default, null):Bool;
-//        public var platforms(default, null):Array<String>;
-//        public var meta(default, null):Metadata;
-
         addRangeToInitializeBlock([
-            macro @:privateAccess typeInfo.typeName = $v{_typeExpr.getTypeName()},
-            macro @:privateAccess typeInfo.module = $v{_typeExpr.getTypeModuleFromTypeExpr()},
-            macro @:privateAccess typeInfo.typePath = {
-                var splittedResult = typeInfo.module.split(".");
-                if (splittedResult.length > 0 && splittedResult[splittedResult.length - 1] == typeInfo.typeName) {
-                    typeInfo.module;
-                } else {
-                    typeInfo.module + "." + typeInfo.typeName;
-                }
-            },
-            macro @:privateAccess typeInfo.file = $v{_typeExpr.getFileFullPath()},
-            macro @:privateAccess typeInfo.type = Type.resolveClass(typeInfo.typePath)
+            macro @:privateAccess typeInfo.typeName = $v{_type.name},
+            macro @:privateAccess typeInfo.module = $v{_type.module},
+            macro @:privateAccess typeInfo.typePath = $v{getTypePath()},
+            macro @:privateAccess typeInfo.file = $v{getFileFullPath()},
+            macro @:privateAccess typeInfo.type = Type.resolveClass(typeInfo.typePath),
+            macro @:privateAccess typeInfo.isExtern = $v{_type.isExtern},
+            macro @:privateAccess typeInfo.isPrivate = $v{_type.isPrivate},
+            macro @:privateAccess typeInfo.position = $v{Context.getPosInfos(_type.pos)},
+            // TODO: implement
+            macro @:privateAccess typeInfo.params = null,
+            // TODO: implement
+            macro @:privateAccess typeInfo.platforms = null,
+            macro $b{getMetadata(_type.meta, macro @:privateAccess typeInfo.meta)}
         ]);
+
+//        trace('PARAMS :: ${_type.params}');
+    }
+
+    function getTypePath():String {
+        var splittedResult = _type.module.split(".");
+        if (splittedResult.length > 0 && splittedResult.pop() == _type.name) {
+            return _type.module;
+        } else {
+            return '${_type.module}.${_type.name}';
+        }
+    }
+
+    function getFileFullPath():String {
+        return FileSystem.fullPath(Context.getPosInfos(_type.pos).file);
+    }
+
+    function getMetadata(metaAccess:MetaAccess, metaFieldExpr:Expr):Array<Expr> {
+        var result:Array<Expr> = [];
+        if (_filter.hasFlag(DescriptorFlag.META)) {
+            result.push(macro $metaFieldExpr = []);
+            for (m in metaAccess.get()) {
+                var metaParamsExpr = macro {{
+                    var metaParams:Array<Dynamic> = null;
+                    $b{{
+                        var blockResult = [];
+                        if (m.params != null && m.params.length > 0) {
+                            blockResult.push(macro metaParams = []);
+                            for (p in m.params) {
+                                blockResult.push(macro metaParams.push($p));
+                            }
+                        }
+                        blockResult;
+                    }};
+                    metaParams;
+                }};
+                result.push(
+                    macro $metaFieldExpr.push(
+                        new hxentrails.descriptions.Metadata(
+                            $v{m.name},
+                            $metaParamsExpr,
+                            $v{m.name.charAt(0) != ":"}
+                        )
+                    )
+                );
+            }
+        }
+        return result;
     }
 
     function addToInitializeBlock(expr:Expr) {

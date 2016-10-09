@@ -2,6 +2,7 @@ package hxentrails.descriptors;
 
 #if macro
 
+import haxe.macro.Type;
 import haxe.macro.Expr;
 
 import hxentrails.common.BinaryFilter;
@@ -9,10 +10,10 @@ import hxentrails.descriptions.TypedefDescription;
 
 using hxentrails.utils.DescriptorUtils;
 
-class TypedefDescriptor extends BaseDescriptor {
+class TypedefDescriptor extends BaseDescriptor<DefType> {
 
     public function new(typeExpr:Expr, filter:BinaryFilter, useCache:Bool) {
-        super(typeExpr, filter, TypedefDescription,  useCache);
+        super(cast typeExpr.getBaseType(), typeExpr, filter, TypedefDescription, useCache);
     }
 
     // TODO: implement

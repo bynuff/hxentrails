@@ -9,6 +9,8 @@ class TypeInfo {
     public var file(default, null):String;
     public var params(default, null):Array<TypeInfo>;
     public var isPrivate(default, null):Bool = false;
+    public var isExtern(default, null):Bool = false;
+    public var position(default, null):{file:String, min:Int, max:Int};
     public var platforms(default, null):Array<String>;
     public var meta(default, null):Array<Metadata>;
     public var kind(default, null):TypeKind = TypeKind.NONE;

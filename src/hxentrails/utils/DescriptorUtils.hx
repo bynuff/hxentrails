@@ -2,7 +2,6 @@ package hxentrails.utils;
 
 #if macro
 
-import sys.FileSystem;
 import Type in StdType;
 
 import haxe.macro.Expr;
@@ -42,41 +41,12 @@ class DescriptorUtils {
                 }
             case _:
                 Context.error('Can not execute type path from $typeName', Context.currentPos());
-        };
-    }
-
-    inline public static function getTypePathFromTypeExpr(typeExpr:Expr):String {
-        return getTypePathFromBaseType(getBaseType(typeExpr));
-    }
-
-    inline public static function getTypeModuleFromTypeExpr(typeExpr:Expr):String {
-        return try {
-            getBaseType(typeExpr).module;
-        } catch (e:Dynamic) {
-            null;
-        };
-    }
-
-    inline public static function getTypePathFromBaseType(baseType:BaseType):String {
-        try {
-            return baseType.module + "." + baseType.name;
-        } catch (e:Dynamic) {
-//             throw
-            return null;
         }
     }
 
-    inline public static function getFileFullPath(typeExpr:Expr):String {
-        return try {
-            FileSystem.fullPath(Context.getPosInfos(getBaseType(typeExpr).pos).file);
-        } catch (e:Dynamic) {
-            null;
-        };
-    }
-
     inline public static function getBaseType(typeExpr:Expr):BaseType {
-        try {
-            return switch (Context.getType(getTypeName(typeExpr))) {
+        return try {
+            switch (Context.getType(getTypeName(typeExpr))) {
                 case TInst(ref, _):
                     ref.get();
                 case TType(ref, _):
@@ -85,8 +55,7 @@ class DescriptorUtils {
                     null;
             }
         } catch (e:Dynamic) {
-//            throw
-            return null;
+            null;
         }
     }
 

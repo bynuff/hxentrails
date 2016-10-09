@@ -12,13 +12,12 @@ abstract DescriptorFlag(Int) from Int to Int {
     var PROPERTIES:Int = 1 << 3;
     var IMPLEMENTATIONS:Int = 1 << 4;
     var FUNCTIONS:Int = 1 << 5;
-    var RUNTIME_META:Int = 1 << 6;
-    var COMPILE_META:Int = 1 << 7;
+    var META:Int = 1 << 6;
 
     public static var ALL:Int =
         CONSTRUCTOR | VARIABLES | PROPERTIES
         | IMPLEMENTATIONS | FUNCTIONS
-        | RUNTIME_META | COMPILE_META;
+        | META;
 
 #if macro
     public static function parseFromExprs(flags:Array<Expr>):Array<DescriptorFlag> {
@@ -30,8 +29,7 @@ abstract DescriptorFlag(Int) from Int to Int {
             case EField(
                 e = {expr: EConst(CIdent("DescriptorFlag")), pos: _},
                 field = "ALL" | "CONSTRUCTOR" | "VARIABLES" | "PROPERTIES"
-                        | "IMPLEMENTATIONS" | "FUNCTIONS" | "RUNTIME_META"
-                        | "COMPILE_META"
+                        | "IMPLEMENTATIONS" | "FUNCTIONS" | "META"
             ):
                 switch (field) {
                     case "ALL":
@@ -46,10 +44,8 @@ abstract DescriptorFlag(Int) from Int to Int {
                         DescriptorFlag.IMPLEMENTATIONS;
                     case "FUNCTIONS":
                         DescriptorFlag.FUNCTIONS;
-                    case "RUNTIME_META":
-                        DescriptorFlag.RUNTIME_META;
-                    case "COMPILE_META":
-                        DescriptorFlag.COMPILE_META;
+                    case "META":
+                        DescriptorFlag.META;
                     case _:
                         Context.error("Wrong descriptor flag value. Use only DescriptorFlag.", flag.pos);
                 }
