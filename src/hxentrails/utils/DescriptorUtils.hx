@@ -2,6 +2,7 @@ package hxentrails.utils;
 
 #if macro
 
+import sys.FileSystem;
 import Type in StdType;
 
 import haxe.macro.Expr;
@@ -29,7 +30,7 @@ class DescriptorUtils {
         }
     }
 
-    inline public static function getTypePath(type:Class<Dynamic>):TypePath {
+    inline public static function getTypePathFromClass(type:Class<Dynamic>):TypePath {
         var typeName = StdType.getClassName(type);
         var macroType = getTypeByName(typeName, Context.currentPos());
 
@@ -44,28 +45,50 @@ class DescriptorUtils {
         };
     }
 
-//    public static function getTypeQalifiedName(classType:ClassType):String {
-//        try {
-//            return classType.module + "." + classType.name;
-//        } catch (e:Dynamic) {
-//            // throw
-//            return null;
-//        }
-//    }
-//
-//    public static function getClassType(type:Expr):ClassType {
-//        try {
-//            return switch (Context.getType(type.toString())) {
-//                case TInst(ref, _):
-//                    ref.get();
-//                case _:
-//                    null;
-//            }
-//        } catch (e:Dynamic) {
+    inline public static function getTypePathFromTypeExpr(typeExpr:Expr):String {
+        return getTypePathFromBaseType(getBaseType(typeExpr));
+    }
+
+    inline public static function getTypeModuleFromTypeExpr(typeExpr:Expr):String {
+        return try {
+            getBaseType(typeExpr).module;
+        } catch (e:Dynamic) {
+            null;
+        };
+    }
+
+    inline public static function getTypePathFromBaseType(baseType:BaseType):String {
+        try {
+            return baseType.module + "." + baseType.name;
+        } catch (e:Dynamic) {
+//             throw
+            return null;
+        }
+    }
+
+    inline public static function getFileFullPath(typeExpr:Expr):String {
+        return try {
+            FileSystem.fullPath(Context.getPosInfos(getBaseType(typeExpr).pos).file);
+        } catch (e:Dynamic) {
+            null;
+        };
+    }
+
+    inline public static function getBaseType(typeExpr:Expr):BaseType {
+        try {
+            return switch (Context.getType(getTypeName(typeExpr))) {
+                case TInst(ref, _):
+                    ref.get();
+                case TType(ref, _):
+                    ref.get();
+                case _:
+                    null;
+            }
+        } catch (e:Dynamic) {
 //            throw
-//            return null;
-//        }
-//    }
+            return null;
+        }
+    }
 
 }
 

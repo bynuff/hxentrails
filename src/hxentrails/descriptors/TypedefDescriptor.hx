@@ -17,28 +17,33 @@ class TypedefDescriptor extends BaseDescriptor {
 
     // TODO: implement
     override function parseType() {
+        super.parseType();
 
-        var pack:Array<String> = null;
-        var module:String = null;
+        addRangeToInitializeBlock([
+            //
+        ]);
 
-        switch (_typeExpr.getType()) {
-            case TType(t, p):
-
-                pack = t.get().pack;
-                module = t.get().module;
-
+//        var pack:Array<String> = null;
+//        var module:String = null;
+//
+//        switch (_typeExpr.getType()) {
+//            case TType(t, p):
+//
+//                pack = t.get().pack;
+//                module = t.get().module;
+//
 //                trace('PACKAGE :: $pack');
-
-
-                var anon = t.get().type;
-                switch (anon) {
-                    case TAnonymous(a):
-                        var ss = a.get();
+//
+//
+//                var anon = t.get().type;
+//                switch (anon) {
+//                    case TAnonymous(a):
+//                        var ss = a.get();
 //                        trace(ss.fields);
-                    case _:
-                }
-            case _:
-        }
+//                    case _:
+//                }
+//            case _:
+//        }
 
     }
 

@@ -1,9 +1,11 @@
 package hxentrails.descriptions;
 
+import hxentrails.descriptions.TypeInfo.TypeKind;
+
 class TypedefDescription extends BaseDescription {
 
-    public function new(typeName:String) {
-        super(typeName);
+    public function new() {
+        super(TypeKind.TYPEDEF);
     }
 
 }

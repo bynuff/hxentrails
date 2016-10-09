@@ -39,9 +39,9 @@ class BaseDescriptor implements IDescriptor {
             return;
         }
 
-        var specialType = createDescriptionSpecialType();
-
         parseType();
+
+        var specialType = createDescriptionSpecialType();
 
         Context.defineType(specialType);
 
@@ -49,13 +49,13 @@ class BaseDescriptor implements IDescriptor {
     }
 
     function createDescriptionSpecialType():TypeDefinition {
-        var baseTypePath = _descriptionBaseType.getTypePath();
+        var baseTypePath = _descriptionBaseType.getTypePathFromClass();
         return macro class $_specialTypeName extends $baseTypePath {
 
             static var __instance__;
 
             public function new() {
-                super($v{_typeExpr.getTypeName()});
+                super();
                 initialize();
             }
 
@@ -78,7 +78,38 @@ class BaseDescriptor implements IDescriptor {
     }
 
     function parseType() {
-        Context.error("BaseDescriptor:parseType is abstract method and should be overriden.", Context.currentPos());
+
+//        public var type(default, null):Class<Dynamic>;
+
+//        public var params(default, null):Array<TypeInfo>;
+//        public var isPrivate(default, null):Bool;
+//        public var platforms(default, null):Array<String>;
+//        public var meta(default, null):Metadata;
+
+        addRangeToInitializeBlock([
+            macro @:privateAccess typeInfo.typeName = $v{_typeExpr.getTypeName()},
+            macro @:privateAccess typeInfo.module = $v{_typeExpr.getTypeModuleFromTypeExpr()},
+            macro @:privateAccess typeInfo.typePath = {
+                var splittedResult = typeInfo.module.split(".");
+                if (splittedResult.length > 0 && splittedResult[splittedResult.length - 1] == typeInfo.typeName) {
+                    typeInfo.module;
+                } else {
+                    typeInfo.module + "." + typeInfo.typeName;
+                }
+            },
+            macro @:privateAccess typeInfo.file = $v{_typeExpr.getFileFullPath()},
+            macro @:privateAccess typeInfo.type = Type.resolveClass(typeInfo.typePath)
+        ]);
+    }
+
+    function addToInitializeBlock(expr:Expr) {
+        _insertBlock.push(expr);
+    }
+
+    function addRangeToInitializeBlock(exprs:Array<Expr>) {
+        for (e in exprs) {
+            addToInitializeBlock(e);
+        }
     }
 
     function get_result():Expr {
