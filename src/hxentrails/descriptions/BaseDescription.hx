@@ -2,12 +2,12 @@ package hxentrails.descriptions;
 
 import hxentrails.descriptions.TypeInfo.TypeKind;
 
-class BaseDescription {
-
-    public var typeInfo(default, null):TypeInfo;
+class BaseDescription extends TypeInfo {
 
     public function new(typeKind:TypeKind) {
-        typeInfo = new TypeInfo(typeKind);
+        super();
+
+        this.typeKind = typeKind;
     }
 
 }

@@ -85,22 +85,19 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
 
     function parseType() {
         addRangeToInitializeBlock([
-            macro @:privateAccess typeInfo.typeName = $v{_type.name},
-            macro @:privateAccess typeInfo.module = $v{_type.module},
-            macro @:privateAccess typeInfo.typePath = $v{getTypePath()},
-            macro @:privateAccess typeInfo.file = $v{getFileFullPath()},
-            macro @:privateAccess typeInfo.type = Type.resolveClass(typeInfo.typePath),
-            macro @:privateAccess typeInfo.isExtern = $v{_type.isExtern},
-            macro @:privateAccess typeInfo.isPrivate = $v{_type.isPrivate},
-            macro @:privateAccess typeInfo.position = $v{Context.getPosInfos(_type.pos)},
+            macro typeName = $v{_type.name},
+            macro module = $v{_type.module},
+            macro typePath = $v{getTypePath()},
+            macro file = $v{getFileFullPath()},
+            macro type = Type.resolveClass(typePath),
+            macro isExtern = $v{_type.isExtern},
+            macro isPrivate = $v{_type.isPrivate},
+            macro position = $v{Context.getPosInfos(_type.pos)},
+            macro params = $v{getTypeParams()},
             // TODO: implement
-            macro @:privateAccess typeInfo.params = null,
-            // TODO: implement
-            macro @:privateAccess typeInfo.platforms = null,
-            macro $b{getMetadata(_type.meta, macro @:privateAccess typeInfo.meta)}
+            macro platforms = null,
+            macro $b{getMetadata(_type.meta, macro meta)}
         ]);
-
-//        trace('PARAMS :: ${_type.params}');
     }
 
     function getTypePath():String {
@@ -114,6 +111,11 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
 
     function getFileFullPath():String {
         return FileSystem.fullPath(Context.getPosInfos(_type.pos).file);
+    }
+
+    // TODO replace String to TypeInfo
+    function getTypeParams():Array<String> {
+        return [for (p in _type.params) p.name ];
     }
 
     function getMetadata(metaAccess:MetaAccess, metaFieldExpr:Expr):Array<Expr> {
