@@ -13,9 +13,11 @@ class TypeInfo {
     public var position(default, null):{file:String, min:Int, max:Int};
     public var platforms(default, null):Array<String>;
     public var meta(default, null):Array<Metadata>;
-    public var kind(default, null):TypeKind = TypeKind.NONE;
+    public var kind(default, null):TypeKind;
 
-    public function new() {}
+    public function new(kind:TypeKind) {
+        this.kind = kind;
+    }
 
 }
 

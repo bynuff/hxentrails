@@ -135,12 +135,15 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
                     }};
                     metaParams;
                 }};
+
+                var isRuntime:Bool = m.name.charAt(0) != ":";
+
                 result.push(
                     macro $metaFieldExpr.push(
                         new hxentrails.descriptions.Metadata(
-                            $v{m.name},
+                            $v{isRuntime ? m.name : m.name.substr(1)},
                             $metaParamsExpr,
-                            $v{m.name.charAt(0) != ":"}
+                            $v{isRuntime}
                         )
                     )
                 );
