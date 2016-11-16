@@ -93,7 +93,7 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
             macro isExtern = $v{_type.isExtern},
             macro isPrivate = $v{_type.isPrivate},
             macro position = $v{Context.getPosInfos(_type.pos)},
-            macro params = $v{getTypeParams()},
+            macro params = $v{getParams(_type.params)},
             // TODO: implement
             macro platforms = null,
             macro $b{getMetadata(_type.meta, macro meta)}
@@ -114,8 +114,8 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
     }
 
     // TODO replace String to TypeInfo
-    function getTypeParams():Array<String> {
-        return [for (p in _type.params) p.name ];
+    function getParams(params:Array<TypeParameter>):Array<String> {
+        return [for (p in params) p.name ];
     }
 
     function getMetadata(metaAccess:MetaAccess, metaFieldExpr:Expr):Array<Expr> {

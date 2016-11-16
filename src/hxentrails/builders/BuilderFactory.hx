@@ -8,6 +8,7 @@ import haxe.macro.Context;
 import hxentrails.common.BinaryFilter;
 import hxentrails.descriptors.IDescriptor;
 import hxentrails.descriptors.DescriptorType;
+import hxentrails.descriptors.ClassDescriptor;
 import hxentrails.descriptors.TypedefDescriptor;
 
 @:final
@@ -26,8 +27,9 @@ class BuilderFactory {
         return switch (descriptorType) {
 //            case DescriptorType.ENUM:
 //            case DescriptorType.CLASS:
+//                new ClassDescriptor(typeExpr, filter, useCache);
             case DescriptorType.TYPEDEF:
-               new TypedefDescriptor(typeExpr, filter, useCache);
+                new TypedefDescriptor(typeExpr, filter, useCache);
 //            case DescriptorType.ABSTRACT:
             case _:
                 Context.error("Not supported descriptor type.", Context.currentPos());
