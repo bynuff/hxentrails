@@ -10,14 +10,14 @@ import hxentrails.descriptions.TypedefDescription;
 
 using hxentrails.utils.DescriptorExtensions;
 
-class TypedefDescriptor extends ClassFieldDescriptor<DefType> {
+class TypedefDescriptor extends FieldDescriptor<DefType> {
 
     public function new(typeExpr:Expr, filter:BinaryFilter, useCache:Bool) {
         // TODO: remove cast
         super(cast typeExpr.getBaseType(), typeExpr, filter, TypedefDescription, useCache);
     }
 
-    override function getClassFields():Array<ClassField> {
+    override function getFields():Array<ClassField> {
         try {
             return switch (_type.type) {
                 case TAnonymous(a):

@@ -12,6 +12,7 @@ import hxentrails.common.BinaryFilter;
 import hxentrails.descriptions.Metadata;
 import hxentrails.descriptions.BaseDescription;
 
+using StringTools;
 using hxentrails.utils.DescriptorExtensions;
 
 class BaseDescriptor<T:BaseType> implements IDescriptor {
@@ -140,7 +141,7 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
                     metaParams;
                 }};
 
-                var isRuntime:Bool = m.name.charAt(0) != ":";
+                var isRuntime:Bool = !m.name.startsWith(":");
 
                 result.push(
                     macro $metaFieldExpr.push(

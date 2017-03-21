@@ -10,7 +10,7 @@ import hxentrails.descriptions.ClassDescription;
 
 using hxentrails.utils.DescriptorExtensions;
 
-class ClassDescriptor extends ClassFieldDescriptor<ClassType> {
+class ClassDescriptor extends FieldDescriptor<ClassType> {
 
     public function new(typeExpr:Expr, filter:BinaryFilter, useCache:Bool) {
         // TODO: remove cast
@@ -27,7 +27,7 @@ class ClassDescriptor extends ClassFieldDescriptor<ClassType> {
 
     }
 
-    override function getClassFields():Array<ClassField> {
+    override function getFields():Array<ClassField> {
         try {
             return _type.fields.get();
         } catch (e:Dynamic) {

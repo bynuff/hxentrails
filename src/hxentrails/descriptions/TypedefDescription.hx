@@ -1,8 +1,6 @@
 package hxentrails.descriptions;
 
-import hxentrails.descriptions.TypeInfo.TypeKind;
-
-class TypedefDescription extends ClassFieldDescription {
+class TypedefDescription extends FieldDescription {
 
     public function new() {
         super(TypeKind.Typedef);
