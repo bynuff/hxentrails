@@ -114,8 +114,9 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
     }
 
     // TODO replace String to TypeInfo
+    // now as is in RTTI
     function getParams(params:Array<TypeParameter>):Array<String> {
-        return [for (p in params) p.name ];
+        return [for (p in params) p.name];
     }
 
     function getMetadata(metaAccess:MetaAccess, metaFieldExpr:Expr):Array<Expr> {

@@ -24,6 +24,13 @@ class ScanUtils {
         return describeType(type, useCache, makeDescriptorBinaryFilterFromExprs(flags), DescriptorType.TYPEDEF);
     }
 
+    macro public static function describeClass(type:Expr, useCache:Bool, flags:Array<Expr>):Expr {
+        if (getDescriptorType(type) != DescriptorType.CLASS) {
+            Context.error("Wrong type definition. It should be class only.", type.pos);
+        }
+        return describeType(type, useCache, makeDescriptorBinaryFilterFromExprs(flags), DescriptorType.CLASS);
+    }
+
 #if macro
     inline static function describeType(
         type:Expr,

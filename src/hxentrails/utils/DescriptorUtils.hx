@@ -44,7 +44,7 @@ class DescriptorUtils {
         }
     }
 
-    inline public static function getBaseType(typeExpr:Expr):BaseType {
+    public static function getBaseType(typeExpr:Expr):BaseType {
         return try {
             switch (Context.getType(getTypeName(typeExpr))) {
                 case TInst(ref, _):
@@ -56,7 +56,7 @@ class DescriptorUtils {
             }
         } catch (e:Dynamic) {
             null;
-        }
+        };
     }
 
 }

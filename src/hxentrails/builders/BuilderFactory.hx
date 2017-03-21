@@ -26,8 +26,8 @@ class BuilderFactory {
     ):IDescriptor {
         return switch (descriptorType) {
 //            case DescriptorType.ENUM:
-//            case DescriptorType.CLASS:
-//                new ClassDescriptor(typeExpr, filter, useCache);
+            case DescriptorType.CLASS:
+                new ClassDescriptor(typeExpr, filter, useCache);
             case DescriptorType.TYPEDEF:
                 new TypedefDescriptor(typeExpr, filter, useCache);
 //            case DescriptorType.ABSTRACT:
