@@ -3,7 +3,6 @@ package hxentrails;
 import utest.Assert;
 
 import hxentrails.utils.ScanUtils;
-import hxentrails.descriptors.DescriptorFlag;
 import hxentrails.descriptions.TypedefDescription;
 
 @:keep
@@ -12,10 +11,10 @@ class ScanUtilTestCases {
     public function new() {}
 
     public function testScanUtil() {
-        var descr1 = ScanUtils.describeTypedef(TestTypedef, false, DescriptorFlag.VARIABLES);
-        var descr2 = ScanUtils.describeTypedef(TestTypedef, true, DescriptorFlag.COMPILE_META);
-        var descr3 = ScanUtils.describeTypedef(TestTypedef, true, DescriptorFlag.COMPILE_META);
-        var descr4 = ScanUtils.describeTypedef(TestTypedef, true);
+        var descr1 = ScanUtils.describe(TestTypedef, false);
+        var descr2 = ScanUtils.describe(TestTypedef, true);
+        var descr3 = ScanUtils.describe(TestTypedef, true);
+        var descr4 = ScanUtils.describe(TestTypedef, true);
 
         Assert.notNull(descr1);
         Assert.notNull(descr2);
