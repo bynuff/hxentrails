@@ -3,6 +3,7 @@ package hxentrails.descriptors;
 #if macro
 
 import sys.FileSystem;
+
 import haxe.macro.Type;
 import haxe.macro.Expr;
 import haxe.macro.Context;
@@ -11,7 +12,7 @@ import hxentrails.common.BinaryFilter;
 import hxentrails.descriptions.Metadata;
 import hxentrails.descriptions.BaseDescription;
 
-using hxentrails.utils.DescriptorUtils;
+using hxentrails.utils.DescriptorExtensions;
 
 class BaseDescriptor<T:BaseType> implements IDescriptor {
 
@@ -121,7 +122,7 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
 
     function getMetadata(metaAccess:MetaAccess, metaFieldExpr:Expr):Array<Expr> {
         var result:Array<Expr> = [];
-        if (_filter.hasFlag(DescriptorFlag.META)) {
+        if (_filter.hasFlag(ScanOption.Meta)) {
             result.push(macro $metaFieldExpr = []);
             for (m in metaAccess.get()) {
                 var metaParamsExpr = macro {{
@@ -169,8 +170,7 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
         var output = _useCache
             ? macro $i{_specialTypeName}.__cachedInstance__()
             : macro $i{_specialTypeName}.__createInstance__();
-        output.pos = _typeExpr.pos;
-        return output;
+        return @:pos(_typeExpr.pos) output;
     }
 
 }

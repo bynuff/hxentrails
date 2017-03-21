@@ -5,10 +5,13 @@ package hxentrails.builders;
 import haxe.macro.Expr;
 
 import hxentrails.common.BinaryFilter;
+import hxentrails.descriptors.ScanOption;
 import hxentrails.descriptors.IDescriptor;
-import hxentrails.descriptors.DescriptorType;
+import hxentrails.descriptors.DescriptorKind;
 
-typedef DescriptorFactoryDelegate = Expr -> DescriptorType -> BinaryFilter -> Bool -> IDescriptor;
+using hxentrails.utils.DescriptorExtensions;
+
+typedef DescriptorFactory = Expr -> DescriptorKind -> BinaryFilter -> Bool -> IDescriptor;
 
 @:final
 class DescriptorBuilder {
@@ -16,26 +19,26 @@ class DescriptorBuilder {
     var _typeExpr:Expr;
     var _useCache:Bool;
     var _filter:BinaryFilter;
-    var _descriptorType:DescriptorType;
-    var _factoryDelegate:DescriptorFactoryDelegate;
+    var _factory:DescriptorFactory;
 
-    public function new(
-        typeExpr:Expr,
-        descriptorType:DescriptorType,
-        defaultFactoryDelegate:DescriptorFactoryDelegate
-    ) {
+    public function new(typeExpr:Expr, defaultFactoryDelegate:DescriptorFactory) {
         _typeExpr = typeExpr;
-        _descriptorType = descriptorType;
-        _factoryDelegate = defaultFactoryDelegate;
+        _factory = defaultFactoryDelegate;
+        _filter = new BinaryFilter(ScanOption.All);
     }
 
-    public function withFactory(factoryDelegate:DescriptorFactoryDelegate):DescriptorBuilder {
-        _factoryDelegate = factoryDelegate;
+    public function withFactory(factory:DescriptorFactory):DescriptorBuilder {
+        if (factory != null) {
+            _factory = factory;
+        }
         return this;
     }
 
-    public function withFilter(filter:BinaryFilter):DescriptorBuilder {
-        _filter = filter;
+    public function withOptions(options:Array<ScanOption>):DescriptorBuilder {
+        if (options != null && options.length > 0) {
+            _filter = new BinaryFilter();
+            _filter += options;
+        }
         return this;
     }
 
@@ -45,7 +48,7 @@ class DescriptorBuilder {
     }
 
     public function build():IDescriptor {
-        return _factoryDelegate(_typeExpr, _descriptorType, _filter, _useCache);
+        return _factory(_typeExpr, _typeExpr.getDescriptorType(), _filter, _useCache);
     }
 
 }

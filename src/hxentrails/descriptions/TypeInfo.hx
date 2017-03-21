@@ -14,7 +14,7 @@ class TypeInfo {
     public var position(default, null):{file:String, min:Int, max:Int};
     public var platforms(default, null):Array<String>;
     public var meta(default, null):Array<Metadata>;
-    public var typeKind(default, null):TypeKind = TypeKind.UNDEFINED;
+    public var typeKind(default, null):TypeKind = TypeKind.Undefined;
 
     public function new() {}
 
@@ -22,9 +22,9 @@ class TypeInfo {
 
 @:enum
 abstract TypeKind(Int) from Int to Int {
-    var UNDEFINED:Int = -1;
-    var CLASS:Int = 0;
-    var INTERFACE:Int = 1;
-    var ENUM:Int = 2;
-    var TYPEDEF:Int = 3;
+    var Undefined:Int = -1;
+    var Class:Int = 0;
+    var Interface:Int = 1;
+    var Enum:Int = 2;
+    var Typedef:Int = 3;
 }

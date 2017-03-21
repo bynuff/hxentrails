@@ -31,11 +31,11 @@ typedef ClassField = {
 
 @:enum
 abstract ClassFieldAccess(Int) from Int to Int {
-    var NORMAL:Int = 0;
-    var NO:Int = 1;
-    var NEVER:Int = 2;
-    var RESOLVE:Int = 3;
-    var CALL:Int = 4;
-    var INLINE:Int = 5;
-    var REQUIRE:Int = 6;
+    var Normal:Int = 0;
+    var No:Int = 1;
+    var Never:Int = 2;
+    var Resolve:Int = 3;
+    var Call:Int = 4;
+    var Inline:Int = 5;
+    var Require:Int = 6;
 }

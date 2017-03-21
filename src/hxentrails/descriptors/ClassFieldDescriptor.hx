@@ -37,8 +37,8 @@ class ClassFieldDescriptor<T:BaseType> extends BaseDescriptor<T> {
                 type: null, // TODO
                 isPublic: $v{field.isPublic},
                 isOverride: false, // TODO
-                readAccess: hxentrails.descriptions.ClassFieldDescription.ClassFieldAccess.NORMAL, // TODO
-                writeAccess: hxentrails.descriptions.ClassFieldDescription.ClassFieldAccess.NORMAL, // TODO
+                readAccess: hxentrails.descriptions.ClassFieldDescription.ClassFieldAccess.Normal, // TODO
+                writeAccess: hxentrails.descriptions.ClassFieldDescription.ClassFieldAccess.Normal, // TODO
                 params: $v{getParams(field.params)},
                 platforms: null, // TODO
                 meta: [],

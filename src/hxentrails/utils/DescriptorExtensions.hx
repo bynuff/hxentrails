@@ -8,10 +8,13 @@ import haxe.macro.Expr;
 import haxe.macro.Type;
 import haxe.macro.Context;
 
+import hxentrails.descriptors.DescriptorKind;
+
 using haxe.macro.ExprTools;
+using hxentrails.utils.DescriptorExtensions;
 
 @:final
-class DescriptorUtils {
+class DescriptorExtensions {
 
     inline public static function getTypeName(typeExpr:Expr):String {
         return typeExpr.toString();
@@ -57,6 +60,25 @@ class DescriptorUtils {
         } catch (e:Dynamic) {
             null;
         };
+    }
+
+    inline public static function getDescriptorType(typeExpr:Expr):DescriptorKind {
+        return switch (typeExpr.getType()) {
+            case TEnum(t, params):
+                DescriptorKind.Enum;
+            case TInst(t, params):
+                DescriptorKind.Class;
+            case TType(t, params):
+                DescriptorKind.Typedef;
+//            case TFun(args, ret):
+//            case TAnonymous(a):
+//            case TDynamic(t):
+//            case TLazy(f):
+            case TAbstract(t, params):
+                DescriptorKind.Abstract;
+            case _:
+                Context.error('Type ${typeExpr.getType()} not supported.', typeExpr.pos);
+        }
     }
 
 }

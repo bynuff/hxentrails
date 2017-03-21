@@ -8,11 +8,12 @@ import haxe.macro.Expr;
 import hxentrails.common.BinaryFilter;
 import hxentrails.descriptions.ClassDescription;
 
-using hxentrails.utils.DescriptorUtils;
+using hxentrails.utils.DescriptorExtensions;
 
 class ClassDescriptor extends ClassFieldDescriptor<ClassType> {
 
     public function new(typeExpr:Expr, filter:BinaryFilter, useCache:Bool) {
+        // TODO: remove cast
         super(cast typeExpr.getBaseType(), typeExpr, filter, ClassDescription, useCache);
     }
 
