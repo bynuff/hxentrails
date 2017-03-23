@@ -27,7 +27,7 @@ class ScanUtilTestCases {
         Assert.is(descr4, TypedefDescription);
 
         Assert.equals(descr2, descr3);
-        Assert.notEquals(descr2, descr4);
+        Assert.equals(descr2, descr4);
     }
 
 }
