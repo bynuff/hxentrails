@@ -26,7 +26,6 @@ build: off
 test_script:
   - haxelib run travix interp
   - haxelib run travix neko
-  - haxelib run travix python
   - haxelib run travix node
   - haxelib run travix flash
   - haxelib run travix java
