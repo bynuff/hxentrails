@@ -118,13 +118,12 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
     // TODO replace String to TypeInfo
     // now as is in RTTI
     function getParams(params:Array<TypeParameter>):Array<String> {
-        return [for (p in params) p.name];
+        return params.length > 0 ? [for (p in params) p.name] : null;
     }
 
     function getMetadata(metaAccess:MetaAccess, metaFieldExpr:Expr):Array<Expr> {
         var result:Array<Expr> = [];
         if (_filter.hasFlag(ScanOption.Meta)) {
-            result.push(macro $metaFieldExpr = []);
             for (m in metaAccess.get()) {
                 var metaParamsExpr = macro {{
                     var metaParams:Array<Dynamic> = null;
@@ -154,6 +153,12 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
                 );
             }
         }
+
+        // init Array<Metadata> if detected any meta,
+        if (result.length > 0) {
+            result.insert(0, macro $metaFieldExpr = []);
+        }
+
         return result;
     }
 

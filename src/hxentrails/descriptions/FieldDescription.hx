@@ -22,7 +22,7 @@ typedef FieldInfo = {
     var params(default, null):Array<String>;
     var platforms(default, null):Array<String>;
     var meta(default, null):Array<Metadata>;
-    var line(default, null):Null<Int>;
+    var line(default, null):Int;
     var overloads(default, null):Array<FieldInfo>;
     var isFunction(default, null):Bool;
 }
