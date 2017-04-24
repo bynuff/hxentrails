@@ -1,0 +1,6 @@
+{
+  "zip": {
+    "name": "hxentrails_haxelib_0.0.2.zip",
+    "include": ["src", "LICENSE", "README.md", "haxelib.json"]
+  }
+}

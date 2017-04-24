@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["type description", "type info", "runtime type info", "rtti", "cross", "utility", "magic"],
   "description": "Runtime type description.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "classPath": "src",
-  "releasenote": "Initial release.",
+  "releasenote": "Descriptions for typedefs & classes. Partially description for type fields.",
   "contributors": ["bynuff"],
   "dependencies": {}
 }
