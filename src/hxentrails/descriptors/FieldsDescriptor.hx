@@ -58,6 +58,7 @@ class FieldsDescriptor<T:BaseType> extends BaseDescriptor<T> {
 
     // TODO: refactor getOverloads like getMetadata
     function getOverloads(field:ClassField):Array<Expr> {
+        #if (haxe_ver >= "3.4.0")
         var overloads:Array<ClassField> = field.overloads.get();
         if (overloads != null) {
             var result:Array<Expr> = [];
@@ -66,6 +67,7 @@ class FieldsDescriptor<T:BaseType> extends BaseDescriptor<T> {
             }
             return result.length > 0 ? result : null;
         }
+        #end
         return null;
     }
 
