@@ -1,14 +1,8 @@
 package hxentrails.descriptions;
 
-class FieldDescription extends BaseDescription {
+class FieldsDescription extends BaseDescription {
 
-    public var fields(default, null):Array<FieldInfo>;
-
-    public function new(typeKind:TypeKind) {
-        super(typeKind);
-
-        fields = [];
-    }
+    public var fields(default, null):Array<FieldInfo> = [];
 
 }
 

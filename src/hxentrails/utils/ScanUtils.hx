@@ -13,7 +13,7 @@ class ScanUtils {
         return processType(type, useCache);
     }
 
-    #if macro
+#if macro
     public static function processType(
         type:Expr,
         useCache:Bool,
@@ -30,6 +30,6 @@ class ScanUtils {
 
         return descriptor.result;
     }
-    #end
+#end
 
 }

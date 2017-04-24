@@ -13,6 +13,7 @@ import hxentrails.descriptions.Metadata;
 import hxentrails.descriptions.BaseDescription;
 
 using StringTools;
+using haxe.macro.TypeTools;
 using hxentrails.utils.DescriptorExtensions;
 
 class BaseDescriptor<T:BaseType> implements IDescriptor {
@@ -28,13 +29,12 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
     var _descriptionBaseType:Class<BaseDescription>;
 
     public function new(
-        type:T,
         typeExpr:Expr,
         filter:BinaryFilter,
         descriptionBaseType:Class<BaseDescription>,
         useCache:Bool
     ) {
-        _type = type;
+        _type = cast typeExpr.getBaseType();
         _typeExpr = typeExpr;
         _filter = filter;
         _useCache = useCache;
@@ -86,12 +86,15 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
     }
 
     function parseType() {
+        // TODO: remove this
+        var typePath = getTypePath();
+
         addRangeToInitializeBlock([
             macro typeName = $v{_type.name},
             macro module = $v{_type.module},
-            macro typePath = $v{getTypePath()},
+            macro typePath = $v{typePath},
             macro file = $v{getFileFullPath()},
-            macro type = Type.resolveClass(typePath),
+            macro type = ${getType(typePath)},
             macro isExtern = $v{_type.isExtern},
             macro isPrivate = $v{_type.isPrivate},
             macro position = $v{Context.getPosInfos(_type.pos)},
@@ -113,6 +116,13 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
 
     function getFileFullPath():String {
         return FileSystem.fullPath(Context.getPosInfos(_type.pos).file);
+    }
+
+    function getType(typePath:String):Expr {
+        return macro {
+            var t = Type.resolveClass($v{typePath});
+            t != null ? t : Type.resolveClass("Dynamic");
+        };
     }
 
     // TODO replace String to TypeInfo

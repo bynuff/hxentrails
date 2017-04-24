@@ -4,9 +4,11 @@ package hxentrails.descriptors;
 
 import haxe.macro.Type;
 import haxe.macro.Expr;
-import haxe.macro.Context;
 
-class FieldDescriptor<T:BaseType> extends BaseDescriptor<T> {
+using StringTools;
+using haxe.macro.TypeTools;
+
+class FieldsDescriptor<T:BaseType> extends BaseDescriptor<T> {
 
     override function parseType() {
         super.parseType();
@@ -15,13 +17,10 @@ class FieldDescriptor<T:BaseType> extends BaseDescriptor<T> {
     }
 
     function parseClassField(field:ClassField, inner:Bool = false):Expr {
-
-        trace(field);
-
         return macro {
             var fieldInfo = {
                 name: $v{field.name},
-                type: null, // TODO
+                type: ${getType(field.type.toString())},
                 isPublic: $v{field.isPublic},
                 isOverride: false, // TODO
                 readAccess: hxentrails.descriptions.FieldAccess.Normal, // TODO
@@ -38,6 +37,14 @@ class FieldDescriptor<T:BaseType> extends BaseDescriptor<T> {
             $b{getMetadata(field.meta, macro fieldInfo.meta)};
             fields.push(fieldInfo);
         };
+    }
+
+    // TODO: tempoary solution for getting method return type
+    override function getType(typePath:String):Expr {
+        if (typePath.endsWith("Void")) {
+            return macro null;
+        }
+        return super.getType(typePath.split("->").pop().trim());
     }
 
     // TODO: move to BaseDescriptor, maybe create 'line' field in TypeInfo
