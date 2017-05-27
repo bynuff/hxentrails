@@ -135,6 +135,10 @@ class BaseDescriptor<T:BaseType> implements IDescriptor {
         var result:Array<Expr> = [];
         if (_filter.hasFlag(ScanOption.Meta)) {
             for (m in metaAccess.get()) {
+                // skip process macro build metadata
+                if (m.name == ":build" || m.name == ":autoBuild") {
+                    continue;
+                }
                 var metaParamsExpr = macro {{
                     var metaParams:Array<Dynamic> = null;
                     $b{{
